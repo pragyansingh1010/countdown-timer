@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Countdown Timer</title>
+
+    <style>
+        body {
+            font-family: Arial;
+            text-align: center;
+            margin-top: 70px;
+            background: #f2f2f2;
+        }
+
+        .container {
+            width: 450px;
+            margin: auto;
+            padding: 30px;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 0 10px gray;
+        }
+
+        input {
+            padding: 10px;
+            width: 220px;
+        }
+
+        button {
+            padding: 10px 18px;
+            margin: 10px 5px;
+            cursor: pointer;
+        }
+
+        #timer {
+            font-size: 30px;
+            font-weight: bold;
+            margin-top: 25px;
+        }
+
+        #message {
+            font-size: 20px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="container">
+
+        <h2>Countdown Timer</h2>
+
+        <input type="datetime-local" id="target">
+
+        <br>
+
+        <button onclick="startTimer()">Start</button>
+        <button onclick="stopTimer()">Stop</button>
+        <button onclick="resetTimer()">Reset</button>
+
+        <div id="timer">
+            00 Days : 00 Hours : 00 Minutes : 00 Seconds
+        </div>
+
+        <p id="message"></p>
+
+    </div>
+
+    <script>
+        let timer;
+
+        function startTimer() {
+            clearInterval(timer);
+
+            let target = document.getElementById("target").value;
+
+            if (target == "") {
+                document.getElementById("message").innerHTML =
+                    "Please select a date and time.";
+                return;
+            }
+
+            timer = setInterval(function() {
+
+                let targetDate = new Date(target).getTime();
+                let now = new Date().getTime();
+
+                let difference = targetDate - now;
+
+                if (difference <= 0) {
+                    clearInterval(timer);
+
+                    document.getElementById("timer").innerHTML =
+                        "00 Days : 00 Hours : 00 Minutes : 00 Seconds";
+
+                    document.getElementById("message").innerHTML =
+                        "Countdown finished!";
+
+                    return;
+                }
+
+                let days = Math.floor(difference / (1000 * 60 * 60 * 24));
+                let hours = Math.floor(
+                    (difference / (1000 * 60 * 60)) % 24
+                );
+                let minutes = Math.floor(
+                    (difference / (1000 * 60)) % 60
+                );
+                let seconds = Math.floor(
+                    (difference / 1000) % 60
+                );
+
+                document.getElementById("timer").innerHTML =
+                    days + " Days : " +
+                    hours + " Hours : " +
+                    minutes + " Minutes : " +
+                    seconds + " Seconds";
+
+                document.getElementById("message").innerHTML = "";
+
+            }, 1000);
+        }
+
+        function stopTimer() {
+            clearInterval(timer);
+        }
+
+        function resetTimer() {
+            clearInterval(timer);
+
+            document.getElementById("target").value = "";
+
+            document.getElementById("timer").innerHTML =
+                "00 Days : 00 Hours : 00 Minutes : 00 Seconds";
+
+            document.getElementById("message").innerHTML = "";
+        }
+    </script>
+
+</body>
+</html>
